@@ -4,6 +4,7 @@ import ReactCommentSchema from "../models/reactCommentSchema.js";
 import Comment from "../models/commentSchema.js";
 import ReactComment from "../models/reactCommentSchema.js";
 import React from "../models/reactSchema.js";
+import Notification from "../models/notificationSchema.js";
 
 export const createPost = async (req, res) => {
     const postData = req.body;
