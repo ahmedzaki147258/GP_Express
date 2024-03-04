@@ -1,3 +1,6 @@
+import multer from "multer";
+import fs from "fs";
+import path from 'path';
 import Notification from "./models/notificationSchema.js";
 
 export const transformationUser = async (user) => {
@@ -66,3 +69,13 @@ export const transformationNotification = async (notification) => {
         dateTime: notification.dateTime
     }
 }
+
+export const storage = (folderName) => multer.diskStorage({
+    destination: (req, file, cb) => {
+        fs.mkdirSync(`upload/${folderName}`, { recursive: true });
+        cb(null, `upload/${folderName}`);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    },
+});

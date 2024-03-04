@@ -2,6 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { v2 as cloudinary } from 'cloudinary';
 import userRoute from './routes/user.js';
 import followRoute from './routes/follow.js';
@@ -11,6 +14,8 @@ import reactRoute from './routes/react.js';
 import reactCommentRoute from './routes/reactComment.js';
 
 dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -33,6 +38,7 @@ cloudinary.config({
 const corsOption = { origin: true,};
 app.use(cors(corsOption));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'upload')));
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 app.use("/api/comment", commentRoute);

@@ -8,6 +8,7 @@ import {
 } from "../transformationObject.js";
 import Follower from "../models/followerSchema.js";
 import Post from "../models/postSchema.js";
+import fs from "fs";
 const salt = 10;
 
 export const signupUser = async (req, res) => {
@@ -69,6 +70,27 @@ export const userLogin = async (req, res) => {
             status: "fail",
             message: error.message,
         });
+    }
+};
+
+export const changeImage = async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const user = await User.findById(userId);
+        user.image = user.image ?? "";
+        const pathName = user.image.split('/').slice(3).join('/');
+        fs.unlink('upload/' + pathName, (err) => {});
+        user.image = `${process.env.SERVER_URL}${req.file.path.replace(/\\/g, '/').replace(/^upload\//, '')}`
+        await user.save();
+        res.status(200).json({
+            status:"success",
+            data: await transformationUser(user)
+        })
+    } catch (error) {
+        res.status(500).json({
+            status:'fail',
+            message:error.message,
+        })
     }
 };
 
