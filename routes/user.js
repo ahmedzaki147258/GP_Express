@@ -5,15 +5,17 @@ import {
     changeImage,
     deleteNotification,
     getFollowersByUserId, getFollowingsByUserId, getNotificationByUserId, getPostsByUserId,
-    getUserById, signupUser, userLogin
+    getUserById, signupUser, updateUser, userLogin
 } from "../controllers/userController.js";
 import {storage} from "../transformationObject.js";
+
 
 const Router = express.Router();
 const uploadUser = multer({ storage: storage('user') });
 
 Router.post("/signup", signupUser);
 Router.post("/login", userLogin);
+Router.patch("/updateUser/:id", updateUser);
 Router.patch("/changeImage/:id", uploadUser.single("image"), changeImage);
 Router.get("/getUserById/:id", getUserById);
 Router.get("/getPostsByUserId/:id", getPostsByUserId);

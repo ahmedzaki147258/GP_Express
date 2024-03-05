@@ -73,6 +73,29 @@ export const userLogin = async (req, res) => {
     }
 };
 
+export const updateUser = async (req, res) => {
+    const userId = req.params.id;
+    try{
+        const user = await User.findById(userId);
+        if (req.body.firstName !== undefined) {
+            user.firstName = req.body.firstName;
+        }
+        if (req.body.lastName !== undefined) {
+            user.lastName = req.body.lastName;
+        }
+        await user.save();
+        res.status(200).json({
+            status: "success",
+            data: await transformationUser(user)
+        })
+    } catch (error) {
+        res.status(500).json({
+            status:'fail',
+            message:error.message,
+        })
+    }
+};
+
 export const changeImage = async (req, res) => {
     const userId = req.params.id;
     try {
